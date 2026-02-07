@@ -6,6 +6,7 @@
     <title>登录 | Material Design 3</title>
     <link rel="stylesheet" th:href="@{/css/login.css}">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script type="importmap">
         {
           "imports": {
@@ -31,7 +32,7 @@
 
         <!-- 欢迎标题 -->
         <h1 class="welcome-title">欢迎回来</h1>
-        <p class="welcome-subtitle">请登录您的账户继续操作</p>
+        <p class="welcome-subtitle">11请登录您的账户继续操作</p>
 
         <!-- 登录表单 -->
         <form id="loginForm">
@@ -46,7 +47,7 @@
                         style="width: 100%;"
                 >
                     <md-icon slot="leading-icon">lock</md-icon>
-                    <md-icon-button slot="trailing-icon" toggle>
+                    <md-icon-button slot="trailing-icon" id="visibility" toggle>
                         <md-icon>visibility</md-icon>
                         <md-icon slot="selected">visibility_off</md-icon>
                     </md-icon-button>
@@ -83,16 +84,15 @@
     // 表单提交处理
     const loginForm = document.getElementById('loginForm');
     const submitBtn = document.getElementById('submitBtn');
-    const emailField = document.getElementById('email');
     const passwordField = document.getElementById('password');
     const rememberCheckbox = document.getElementById('remember');
 
     // 密码可见性切换
-    const toggleButton = passwordField.querySelector('md-icon-button[toggle]');
+    const toggleButton = document.getElementById('visibility')
+
     if (toggleButton) {
         toggleButton.addEventListener('click', () => {
-            const passwordInput = passwordField.querySelector('input');
-            passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
+            passwordField.type = passwordField.type === "password" ? "text" : "password"
         });
     }
 
@@ -101,23 +101,12 @@
         event.preventDefault();
 
         // 验证表单
-        const email = emailField.value;
         const password = passwordField.value;
         const rememberMe = rememberCheckbox.selected;
 
-        if (!email || !password) {
-            emailField.error = !email;
+        if (!password) {
             passwordField.error = !password;
             showToast('请输入邮箱和密码', 'error');
-            return;
-        }
-
-        // 邮箱格式验证
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            emailField.error = true;
-            emailField.errorText = '请输入有效的邮箱地址';
-            showToast('邮箱格式不正确', 'error');
             return;
         }
 
@@ -136,22 +125,47 @@
                 登录中...
             `;
 
-        // 模拟API请求延迟
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        try {
+            const formData = new FormData();
+            formData.append('password', password);
 
-        showToast('登录成功！正在跳转...', 'success');
+            const response = await fetch('/login', {
+                method: 'POST',
+                body: formData
+            });
 
-        // 在实际应用中，这里会进行真正的登录请求
-        console.log('登录信息:', { email, password, rememberMe });
+            const result = await response.json();
 
-        // 重置表单状态
-        setTimeout(() => {
+            if (result.success) {
+                showToast('登录成功！正在跳转...', 'success');
+                // 登录成功后跳转到首页
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 1500);
+            } else {
+                showToast(result.message || '登录失败', 'error');
+                passwordField.error = true;
+                passwordField.errorText = '密码错误';
+            }
+        } catch (error) {
+            showToast('网络错误，请重试', 'error');
+            console.error('登录错误:', error);
+        } finally {
             submitBtn.disabled = false;
             submitBtn.innerHTML = `
-                    登录
-                    <md-icon slot="icon">arrow_forward</md-icon>
-                `;
-        }, 2000);
+            登录
+            <md-icon slot="icon">arrow_forward</md-icon>
+        `;
+        }
+
+        // // 重置表单状态
+        // setTimeout(() => {
+        //     submitBtn.disabled = false;
+        //     submitBtn.innerHTML = `
+        //             登录
+        //             <md-icon slot="icon">arrow_forward</md-icon>
+        //         `;
+        // }, 2000);
     });
 
     // 显示Toast通知
@@ -161,20 +175,16 @@
         if (existingToast) existingToast.remove();
 
         // 创建新的toast
-        const toast = document.createElement('md-snackbar');
+        const toast = document.createElement('div');
+        toast.className = "mini-container"
         toast.innerHTML = message;
-        toast.style.position = 'fixed';
-        toast.style.bottom = '20px';
-        toast.style.left = '50%';
-        toast.style.transform = 'translateX(-50%)';
-        toast.style.zIndex = '1000';
 
         // 根据类型设置样式
-        if (type === 'error') {
-            toast.style.backgroundColor = '#d32f2f';
-        } else if (type === 'success') {
-            toast.style.backgroundColor = '#2e7d32';
-        }
+        // if (type === 'error') {
+        //     toast.style.backgroundColor = '#d32f2f';
+        // } else if (type === 'success') {
+        //     toast.style.backgroundColor = '#2e7d32';
+        // }
 
         document.body.appendChild(toast);
 
@@ -186,13 +196,6 @@
         }, 3000);
     }
 
-    // 第三方登录按钮点击事件
-    document.querySelectorAll('.social-button').forEach(button => {
-        button.addEventListener('click', function() {
-            const provider = this.textContent.trim();
-            showToast(`正在使用${provider}登录...`, 'info');
-        });
-    });
 </script>
 </body>
 </html>
