@@ -26,20 +26,44 @@ body {
     min-height: 400px;
 }
 
+/*.mini-container {*/
+/*    display: flex;*/
+/*    position: fixed;*/
+/*    width: 100%;*/
+/*    min-width: 200px;*/
+/*    background: white;*/
+/*    border-radius: 5px;*/
+/*    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);*/
+/*    transform: translateX(-50%);*/
+/*    overflow: hidden;*/
+/*    min-height: 50px;*/
+/*    bottom: 20px;*/
+/*    left: 50%;*/
+/*}*/
+
 .mini-container {
-    display: flex;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     position: fixed;
-    width: 100%;
-    max-width: 50px;
-    background: white;
-    border-radius: 5px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
-    overflow: hidden;
-    min-height: 40px;
-    bottom: 20px;
+    bottom: 40px;
     left: 50%;
+    transform: translateX(-50%);
+    min-width: 120px;
+    max-width: 90%;
+    padding: 12px 24px;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow:
+            0 4px 6px -1px rgba(0, 0, 0, 0.05),
+            0 10px 20px -5px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
-/* 左侧登录表单区域 */
+
 .login-form {
     flex: 1;
     padding: 48px 40px;
@@ -136,7 +160,6 @@ body {
     border-color: #c2c6cc;
 }
 
-/* 注册链接 */
 .signup-link {
     text-align: center;
     color: #5f6368;
@@ -149,7 +172,6 @@ body {
     font-weight: 500;
 }
 
-/* 右侧展示区域 */
 .illustration {
     flex: 1;
     background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%);
@@ -180,7 +202,6 @@ body {
     max-width: 320px;
 }
 
-/* 响应式设计 */
 @media (max-width: 768px) {
     .container {
         flex-direction: column;
