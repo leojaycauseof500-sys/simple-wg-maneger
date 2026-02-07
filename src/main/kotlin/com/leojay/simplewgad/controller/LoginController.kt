@@ -17,10 +17,10 @@ class LoginController {
     @PostMapping("/login")
     @ResponseBody
     fun login(@RequestParam password : String): String {
-        if (password == "12345678asd") {
-            return "success"
+        return if (password == "12345678asd") {
+            "success"
         }else {
-            return "fail"
+            "fail"
         }
 
     }

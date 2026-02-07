@@ -32,7 +32,7 @@
 
         <!-- 欢迎标题 -->
         <h1 class="welcome-title">欢迎回来</h1>
-        <p class="welcome-subtitle">11请登录您的账户继续操作</p>
+        <p class="welcome-subtitle">请登录您的账户继续操作</p>
 
         <!-- 登录表单 -->
         <form id="loginForm">
@@ -171,14 +171,14 @@
     // 显示Toast通知
     function showToast(message, type = 'info') {
         // 移除现有的toast
-        const existingToast = document.querySelector('md-snackbar');
+        const existingToast = document.getElementById('toast');
         if (existingToast) existingToast.remove();
 
         // 创建新的toast
         const toast = document.createElement('div');
         toast.className = "mini-container"
         toast.innerHTML = message;
-
+        toast.id = "toast"
         // 根据类型设置样式
         // if (type === 'error') {
         //     toast.style.backgroundColor = '#d32f2f';
@@ -188,12 +188,6 @@
 
         document.body.appendChild(toast);
 
-        // 显示并自动隐藏
-        toast.show();
-        setTimeout(() => {
-            toast.close();
-            setTimeout(() => toast.remove(), 300);
-        }, 3000);
     }
 
 </script>
