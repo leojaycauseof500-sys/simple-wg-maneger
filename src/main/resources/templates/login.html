@@ -1,6 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 | Material Design 3</title>
+    <link rel="stylesheet" th:href="@{/css/login.css}">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <script type="importmap">
         {
@@ -15,27 +19,180 @@
 
         document.adoptedStyleSheets.push(typescaleStyles.styleSheet);
     </script>
-</head>
 <body>
-<h1 class="md-typescale-display-medium">Hello Material!</h1>
-<form>
-    <p class="md-typescale-body-medium">Check out these controls in a form!</p>
-    <md-checkbox></md-checkbox>
-    <div>
-        <md-radio name="group"></md-radio>
-        <md-radio name="group"></md-radio>
-        <md-radio name="group"></md-radio>
+<div class="container">
+    <!-- 左侧登录表单 -->
+    <div class="login-form">
+        <!-- Logo区域 -->
+        <div class="logo">
+            <span class="material-symbols-outlined logo-icon">dashboard</span>
+            <span class="logo-text">MaterialApp</span>
+        </div>
+
+        <!-- 欢迎标题 -->
+        <h1 class="welcome-title">欢迎回来</h1>
+        <p class="welcome-subtitle">请登录您的账户继续操作</p>
+
+        <!-- 登录表单 -->
+        <form id="loginForm">
+            <!-- 密码输入 -->
+            <div class="form-group">
+                <md-outlined-text-field
+                        id="password"
+                        type="password"
+                        label="密码"
+                        required
+                        autocomplete="current-password"
+                        style="width: 100%;"
+                >
+                    <md-icon slot="leading-icon">lock</md-icon>
+                    <md-icon-button slot="trailing-icon" toggle>
+                        <md-icon>visibility</md-icon>
+                        <md-icon slot="selected">visibility_off</md-icon>
+                    </md-icon-button>
+                </md-outlined-text-field>
+                <md-helper-text>至少8个字符，包含字母和数字</md-helper-text>
+            </div>
+
+            <!-- 记住我和忘记密码 -->
+            <div class="form-actions">
+                <md-checkbox id="remember" touch-target="wrapper">
+                    记住我
+                </md-checkbox>
+                <a href="#" style="color: #1a73e8; text-decoration: none; font-size: 14px;">
+                    忘记密码？
+                </a>
+            </div>
+
+            <!-- 登录按钮 -->
+            <md-filled-button
+                    id="submitBtn"
+                    type="submit"
+                    style="width: 100%; height: 48px;"
+            >
+                登录
+                <md-icon slot="icon">arrow_forward</md-icon>
+            </md-filled-button>
+
+        </form>
     </div>
-    <md-outlined-text-field label="Favorite color" value="Purple"></md-outlined-text-field>
-    <md-outlined-button type="reset">Reset</md-outlined-button>
-</form>
-<style>
-    form {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 16px;
+
+</div>
+
+<script>
+    // 表单提交处理
+    const loginForm = document.getElementById('loginForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const emailField = document.getElementById('email');
+    const passwordField = document.getElementById('password');
+    const rememberCheckbox = document.getElementById('remember');
+
+    // 密码可见性切换
+    const toggleButton = passwordField.querySelector('md-icon-button[toggle]');
+    if (toggleButton) {
+        toggleButton.addEventListener('click', () => {
+            const passwordInput = passwordField.querySelector('input');
+            passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
+        });
     }
-</style>
+
+    // 表单提交处理
+    loginForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        // 验证表单
+        const email = emailField.value;
+        const password = passwordField.value;
+        const rememberMe = rememberCheckbox.selected;
+
+        if (!email || !password) {
+            emailField.error = !email;
+            passwordField.error = !password;
+            showToast('请输入邮箱和密码', 'error');
+            return;
+        }
+
+        // 邮箱格式验证
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            emailField.error = true;
+            emailField.errorText = '请输入有效的邮箱地址';
+            showToast('邮箱格式不正确', 'error');
+            return;
+        }
+
+        // 密码长度验证
+        if (password.length < 8) {
+            passwordField.error = true;
+            passwordField.errorText = '密码至少需要8个字符';
+            showToast('密码长度不足', 'error');
+            return;
+        }
+
+        // 模拟登录过程
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `
+                <md-circular-progress indeterminate style="--md-circular-progress-size: 20px;"></md-circular-progress>
+                登录中...
+            `;
+
+        // 模拟API请求延迟
+        await new Promise(resolve => setTimeout(resolve, 1500));
+
+        showToast('登录成功！正在跳转...', 'success');
+
+        // 在实际应用中，这里会进行真正的登录请求
+        console.log('登录信息:', { email, password, rememberMe });
+
+        // 重置表单状态
+        setTimeout(() => {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `
+                    登录
+                    <md-icon slot="icon">arrow_forward</md-icon>
+                `;
+        }, 2000);
+    });
+
+    // 显示Toast通知
+    function showToast(message, type = 'info') {
+        // 移除现有的toast
+        const existingToast = document.querySelector('md-snackbar');
+        if (existingToast) existingToast.remove();
+
+        // 创建新的toast
+        const toast = document.createElement('md-snackbar');
+        toast.innerHTML = message;
+        toast.style.position = 'fixed';
+        toast.style.bottom = '20px';
+        toast.style.left = '50%';
+        toast.style.transform = 'translateX(-50%)';
+        toast.style.zIndex = '1000';
+
+        // 根据类型设置样式
+        if (type === 'error') {
+            toast.style.backgroundColor = '#d32f2f';
+        } else if (type === 'success') {
+            toast.style.backgroundColor = '#2e7d32';
+        }
+
+        document.body.appendChild(toast);
+
+        // 显示并自动隐藏
+        toast.show();
+        setTimeout(() => {
+            toast.close();
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+
+    // 第三方登录按钮点击事件
+    document.querySelectorAll('.social-button').forEach(button => {
+        button.addEventListener('click', function() {
+            const provider = this.textContent.trim();
+            showToast(`正在使用${provider}登录...`, 'info');
+        });
+    });
+</script>
 </body>
 </html>

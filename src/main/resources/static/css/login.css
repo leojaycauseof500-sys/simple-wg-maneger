@@ -1,0 +1,184 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', system-ui, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    color: #1f1f1f;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    max-width: 500px;
+    background: white;
+    border-radius: 28px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    min-height: 400px;
+}
+
+/* 左侧登录表单区域 */
+.login-form {
+    flex: 1;
+    padding: 48px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 40px;
+}
+
+.logo-icon {
+    font-size: 32px;
+    color: #1a73e8;
+}
+
+.logo-text {
+    font-size: 24px;
+    font-weight: 500;
+    color: #1f1f1f;
+}
+
+.welcome-title {
+    font-size: 28px;
+    font-weight: 400;
+    margin-bottom: 8px;
+}
+
+.welcome-subtitle {
+    color: #5f6368;
+    margin-bottom: 40px;
+}
+
+/* 表单样式 */
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    margin: 32px 0;
+    color: #5f6368;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #dadce0;
+}
+
+.divider span {
+    padding: 0 16px;
+}
+
+/* 第三方登录 */
+.social-login {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.social-button {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 16px;
+    border: 1px solid #dadce0;
+    background: white;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.social-button:hover {
+    background: #f8f9fa;
+    border-color: #c2c6cc;
+}
+
+/* 注册链接 */
+.signup-link {
+    text-align: center;
+    color: #5f6368;
+    margin-top: 32px;
+}
+
+.signup-link a {
+    color: #1a73e8;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+/* 右侧展示区域 */
+.illustration {
+    flex: 1;
+    background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    color: white;
+}
+
+.illustration-image {
+    font-size: 180px;
+    margin-bottom: 32px;
+}
+
+.illustration-title {
+    font-size: 28px;
+    font-weight: 300;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.illustration-text {
+    text-align: center;
+    opacity: 0.9;
+    line-height: 1.6;
+    max-width: 320px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        max-width: 450px;
+    }
+
+    .illustration {
+        display: none;
+    }
+
+    .login-form {
+        padding: 32px 24px;
+    }
+}

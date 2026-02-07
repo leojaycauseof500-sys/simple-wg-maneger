@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: simple-wg-ad-dev
+  thymeleaf:
+    cache: false
+
